@@ -126,7 +126,9 @@ setStatusMessage "Create ansible.cfg"
 
 setStatusMessage "Get all the required roles"
 
-ansible-galaxy install -f -r config/requirements.yml -p roles
+if [ -f "config/requirements.yml" ]; then
+    ansible-galaxy install -f -r config/requirements.yml -p roles
+fi
 
 if [ -f "config/$username.yml" ]; then
     setStatusMessage "Running the ansible playbook for $username"
