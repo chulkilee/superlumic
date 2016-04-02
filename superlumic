@@ -130,9 +130,14 @@ if [ -f "config/requirements.yml" ]; then
     ansible-galaxy install -f -r config/requirements.yml -p roles
 fi
 
-if [ -f "config/$username.yml" ]; then
-    setStatusMessage "Running the ansible playbook for $username"
-    ansible-playbook -i "localhost," config/$username.yml
+if [ -f "config/users/$username.yml" ]; then
+    user_file="config/users/$username.yml"
+elif [ -f "config/$username.yml" ]; then
+    setStatusMessage "[WARNING] move config/$username.yml to config/users/$username.yml"
+    user_file="config/$username.yml"
 else
     triggerError "No playbook for $username found"
 fi
+
+setStatusMessage "Running the ansible playbook for $username"
+ansible-playbook -i "localhost," $user_file
